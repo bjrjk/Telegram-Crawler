@@ -66,7 +66,7 @@ def main():
         chatsList = initChatsList(tg)
         groupTitle = '𝗦𝗜𝗚𝗞𝗜𝗦𝗦💋'
         chatID = getChatIDByTitle(chatsList, groupTitle)
-        chatHistory = tg.get_chat_history(chat_id=chatID, from_message_id=0, offset=0, only_local=False)
+        chatHistory = tg.get_chat_history(chat_id=chatID, limit=50, from_message_id=0, offset=0, only_local=False)
         chatHistory.wait()
         #pprint(chatHistory.error_info)
         pprint(chatHistory.update)
