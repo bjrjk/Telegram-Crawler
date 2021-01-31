@@ -82,8 +82,9 @@ def getChatMessage(
                 stats_data[message['id']] = {
                     "text": message['content']['text']['text'],
                     "date": message['date'],
-                    "sender_user_id": message['sender']['user_id']
                 }
+            if not message['is_channel_post']:
+                stats_data[message['id']]["sender_user_id"] = message['sender']['user_id']
             from_message_id = message['id']
         total_messages = len(stats_data)
         if (receive_limit != -1 and total_messages > receive_limit) or not response.update['total_count']:
