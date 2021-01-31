@@ -60,16 +60,51 @@ def getChatIDByTitle(chatsList, title):
             return value
     return None
 
+def getChatMessage(
+        chat_id: int,
+        limit: int = 100,
+        from_message_id: int = 0
+):
+    pass
+
+def retreive_messages(telegram, chat_id, receive_limit):
+    receive = True
+    from_message_id = 0
+    stats_data = {}
+
+    while receive:
+        response = telegram.get_chat_history(
+            chat_id=chat_id,
+            limit=1000,
+            from_message_id=from_message_id,
+        )
+        response.wait()
+
+        for message in response.update['messages']:
+            if message['content']['@type'] == 'messageText':
+                stats_data[message['id']] = message['content']['text']['text']
+            from_message_id = message['id']
+
+        total_messages = len(stats_data)
+        if total_messages > receive_limit or not response.update['total_count']:
+            receive = False
+
+        print(f'[{total_messages}/{receive_limit}] received')
+
+    return stats_data
+
 def main():
     try:
         tg = init()
         chatsList = initChatsList(tg)
         groupTitle = '𝗦𝗜𝗚𝗞𝗜𝗦𝗦💋'
         chatID = getChatIDByTitle(chatsList, groupTitle)
-        chatHistory = tg.get_chat_history(chat_id=chatID, limit=50, from_message_id=0, offset=0, only_local=False)
-        chatHistory.wait()
+        print(retreive_messages(tg, chatID, 100))
+
+        #chatHistory = tg.get_chat_history(chat_id=chatID, limit=50, from_message_id=0, offset=0, only_local=False)
+        #chatHistory.wait()
         #pprint(chatHistory.error_info)
-        pprint(chatHistory.update)
+        #pprint(chatHistory.update)
     finally:
         uninit(tg)
 
