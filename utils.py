@@ -40,3 +40,7 @@ def parse_proxy_type(args):
     else:
         obj['secret'] = args.secret
     return obj
+
+def WriteTXT(fileName, content):
+    with open(fileName, "w", encoding='utf-8') as f:
+        f.write(content)

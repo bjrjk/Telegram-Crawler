@@ -226,3 +226,5 @@ modules.xml
 
 Pipfile
 Pipfile.lock
+
+*.log

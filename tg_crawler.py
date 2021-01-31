@@ -1,4 +1,4 @@
-import argparse,time
+import argparse,time,json
 
 from pprint import pprint
 from telegram.client import Telegram
@@ -61,13 +61,6 @@ def getChatIDByTitle(chatsList, title):
     return None
 
 def getChatMessage(
-        chat_id: int,
-        limit: int = 100,
-        from_message_id: int = 0
-):
-    pass
-
-def getChatMessage(
         telegram,
         chat_id: int,
         receive_limit: int = -1,
@@ -107,13 +100,8 @@ def main():
         groupTitle = '𝗦𝗜𝗚𝗞𝗜𝗦𝗦💋'
         chatID = getChatIDByTitle(chatsList, groupTitle)
         messageData = getChatMessage(telegram = tg, chat_id = chatID, receive_limit = 20000)
-
-        #chatHistory = tg.get_chat_history(chat_id=chatID, limit=50, from_message_id=0, offset=0, only_local=False)
-        #chatHistory.wait()
-        #pprint(chatHistory.error_info)
-        #pprint(chatHistory.update)
+        WriteTXT('chatMessages.log', json.dumps(messageData))
     finally:
-        pprint(messageData)
         uninit(tg)
 
 
