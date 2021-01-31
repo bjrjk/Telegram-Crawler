@@ -66,8 +66,8 @@ def main():
         chatsList = initChatsList(tg)
         groupTitle = '𝗦𝗜𝗚𝗞𝗜𝗦𝗦💋'
         chatID = getChatIDByTitle(chatsList, groupTitle)
-        for i in range(10):
-            tg.send_message(chat_id=chatID, text=("Automated Message Test ID: %d" % i))
+        chatHistory = tg.get_chat_history(chat_id=chatID, limit=100, from_message_id=0, offset=0)
+        pprint(chatHistory.update)
     finally:
         uninit(tg)
 
