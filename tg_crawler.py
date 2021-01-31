@@ -44,6 +44,7 @@ def initChats(tg):
             chat_ids += result.update['chat_ids']
             chat_info = tg.get_chat(chat_ids[-1])
             chat_info.wait()
+            pprint(chat_info.update)
             offset_chat_id = chat_info.update['id']
             offset_order = chat_info.update['order']
         else:  # no more chats to load
@@ -54,9 +55,6 @@ def initChats(tg):
 def main():
     try:
         tg = init()
-        test = tg.get_chats(offset_order=9223372036854775807)
-        test.wait()
-        pprint(test.update)
         #initChats(tg)
         #result = tg.get_me()
         #result.wait()
