@@ -54,7 +54,10 @@ def initChats(tg):
 def main():
     try:
         tg = init()
-        initChats(tg)
+        test = tg.get_chats(offset_order=9223372036854775807)
+        test.wait()
+        pprint(test.update)
+        #initChats(tg)
         #result = tg.get_me()
         #result.wait()
         #pprint(result.update)
