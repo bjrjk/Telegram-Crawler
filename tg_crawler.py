@@ -93,17 +93,24 @@ def getChatMessage(
 
     return stats_data
 
-def main():
+def main(
+        groupTitle: str,
+        limit: int,
+        fileName: str
+):
     try:
         tg = init()
         chatsList = initChatsList(tg)
-        groupTitle = '𝗦𝗜𝗚𝗞𝗜𝗦𝗦💋'
         chatID = getChatIDByTitle(chatsList, groupTitle)
-        messageData = getChatMessage(telegram = tg, chat_id = chatID, receive_limit = 200000)
-        utils.WriteTXT('chatMessages.log', json.dumps(messageData))
+        messageData = getChatMessage(telegram = tg, chat_id = chatID, receive_limit = limit)
+        utils.WriteTXT(fileName, json.dumps(messageData))
     finally:
         uninit(tg)
 
 
 if __name__ == '__main__':
-    main()
+    main(
+        groupTitle='Group/Channel Title', # Fill in Your Group Title Here
+        limit=100000, # Message number You want to retrieve, -1 to retrieve all
+        fileName='chatMessages.log' # Where to store your crawled data
+    )
