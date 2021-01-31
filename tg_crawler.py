@@ -55,7 +55,7 @@ def initChats(tg):
 def main():
     try:
         tg = init()
-        #initChats(tg)
+        initChats(tg)
         #result = tg.get_me()
         #result.wait()
         #pprint(result.update)
