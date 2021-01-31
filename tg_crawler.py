@@ -65,7 +65,7 @@ def getChatMessage(
         chat_id: int,
         receive_limit: int = -1,
         from_message_id: int = 0,
-        sleep_interval: float = 0.5
+        sleep_interval: float = 1
 ):
     receive = True
     stats_data = {}
@@ -99,8 +99,8 @@ def main():
         chatsList = initChatsList(tg)
         groupTitle = '𝗦𝗜𝗚𝗞𝗜𝗦𝗦💋'
         chatID = getChatIDByTitle(chatsList, groupTitle)
-        messageData = getChatMessage(telegram = tg, chat_id = chatID, receive_limit = 20000)
-        WriteTXT('chatMessages.log', json.dumps(messageData))
+        messageData = getChatMessage(telegram = tg, chat_id = chatID, receive_limit = 200000)
+        utils.WriteTXT('chatMessages.log', json.dumps(messageData))
     finally:
         uninit(tg)
 
