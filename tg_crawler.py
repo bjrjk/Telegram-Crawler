@@ -99,7 +99,7 @@ def main():
         chatsList = initChatsList(tg)
         groupTitle = '𝗦𝗜𝗚𝗞𝗜𝗦𝗦💋'
         chatID = getChatIDByTitle(chatsList, groupTitle)
-        messageData = getChatMessage(telegram = tg, chat_id = chatID, receive_limit = 200000)
+        messageData = getChatMessage(telegram = tg, chat_id = chatID, receive_limit = 1000)
         utils.WriteTXT('chatMessages.log', json.dumps(messageData))
     finally:
         uninit(tg)
