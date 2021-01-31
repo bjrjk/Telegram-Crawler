@@ -1,4 +1,4 @@
-import argparse
+import argparse,time
 
 from pprint import pprint
 from telegram.client import Telegram
@@ -71,7 +71,8 @@ def getChatMessage(
         telegram,
         chat_id: int,
         receive_limit: int = -1,
-        from_message_id: int = 0
+        from_message_id: int = 0,
+        sleep_interval: float = 0.1
 ):
     receive = True
     stats_data = {}
@@ -95,6 +96,7 @@ def getChatMessage(
         if (receive_limit != -1 and total_messages > receive_limit) or not response.update['total_count']:
             receive = False
         print(f'[{total_messages}/{receive_limit}] received')
+        time.sleep(sleep_interval)
 
     return stats_data
 
@@ -104,13 +106,14 @@ def main():
         chatsList = initChatsList(tg)
         groupTitle = '𝗦𝗜𝗚𝗞𝗜𝗦𝗦💋'
         chatID = getChatIDByTitle(chatsList, groupTitle)
-        print(getChatMessage(telegram = tg, chat_id = chatID))
+        messageData = getChatMessage(telegram = tg, chat_id = chatID)
 
         #chatHistory = tg.get_chat_history(chat_id=chatID, limit=50, from_message_id=0, offset=0, only_local=False)
         #chatHistory.wait()
         #pprint(chatHistory.error_info)
         #pprint(chatHistory.update)
     finally:
+        pprint(messageData)
         uninit(tg)
 
 
