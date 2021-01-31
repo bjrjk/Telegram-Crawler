@@ -29,13 +29,35 @@ def init():
 def uninit(tg):
     tg.stop()
 
+def initChats(tg):
+    offset_chat_id = 0
+    chat_ids = []
+    offset_order = 2 ** 63 - 1
+    chats_received = True
+
+    while chats_received:
+        result = tg.get_chats(offset_order=offset_order, offset_chat_id=offset_chat_id)
+        result.wait()
+
+        if result.update['chat_ids']:
+            pprint(result.update)
+            chat_ids += result.update['chat_ids']
+            chat_info = tg.get_chat(chat_ids[-1])
+            chat_info.wait()
+            offset_chat_id = chat_info.update['id']
+            offset_order = chat_info.update['order']
+        else:  # no more chats to load
+            chats_received = False
+
+    print('Chats: ', chat_ids)
+
 def main():
     try:
         tg = init()
-
-        result = tg.get_me()
-        result.wait()
-        pprint(result.update)
+        initChats(tg)
+        #result = tg.get_me()
+        #result.wait()
+        #pprint(result.update)
 
     finally:
         uninit(tg)
