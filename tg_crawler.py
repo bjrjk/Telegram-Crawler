@@ -67,9 +67,13 @@ def getChatMessage(
 ):
     pass
 
-def retreive_messages(telegram, chat_id, receive_limit):
+def getChatMessage(
+        telegram,
+        chat_id: int,
+        receive_limit: int = -1,
+        from_message_id: int = 0
+):
     receive = True
-    from_message_id = 0
     stats_data = {}
 
     while receive:
@@ -79,16 +83,17 @@ def retreive_messages(telegram, chat_id, receive_limit):
             from_message_id=from_message_id,
         )
         response.wait()
-
         for message in response.update['messages']:
             if message['content']['@type'] == 'messageText':
-                stats_data[message['id']] = message['content']['text']['text']
+                stats_data[message['id']] = {
+                    "text": message['content']['text']['text'],
+                    "date": message['date'],
+                    "sender_user_id": message['sender']['user_id']
+                }
             from_message_id = message['id']
-
         total_messages = len(stats_data)
-        if total_messages > receive_limit or not response.update['total_count']:
+        if (receive_limit != -1 and total_messages > receive_limit) or not response.update['total_count']:
             receive = False
-
         print(f'[{total_messages}/{receive_limit}] received')
 
     return stats_data
@@ -99,7 +104,7 @@ def main():
         chatsList = initChatsList(tg)
         groupTitle = '𝗦𝗜𝗚𝗞𝗜𝗦𝗦💋'
         chatID = getChatIDByTitle(chatsList, groupTitle)
-        print(retreive_messages(tg, chatID, 100))
+        print(getChatMessage(telegram = tg, chat_id = chatID))
 
         #chatHistory = tg.get_chat_history(chat_id=chatID, limit=50, from_message_id=0, offset=0, only_local=False)
         #chatHistory.wait()
