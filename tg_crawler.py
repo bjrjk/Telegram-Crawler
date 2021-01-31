@@ -46,7 +46,7 @@ def initChats(tg):
             chat_info.wait()
             pprint(chat_info.update)
             offset_chat_id = chat_info.update['id']
-            offset_order = chat_info.update['order']
+            offset_order = chat_info.update['positions'][0]['order']
         else:  # no more chats to load
             chats_received = False
 
