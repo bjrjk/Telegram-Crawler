@@ -29,7 +29,7 @@ def init():
 def uninit(tg):
     tg.stop()
 
-def initChats(tg):
+def initChatsList(tg):
     offset_chat_id = 0
     chatsList = {}
     offset_order = 2 ** 63 - 1
@@ -47,22 +47,25 @@ def initChats(tg):
                 chatsList[title] = chatID
             chat_info = tg.get_chat(chatsDict[-1])
             chat_info.wait()
-            pprint(chat_info.update)
             offset_chat_id = chat_info.update['id']
             offset_order = chat_info.update['positions'][0]['order']
         else:
             chats_received = False
 
-    print('Chats-Map: ', chatsList)
+    return chatsList
+
+def getChatIDByTitle(chatsList, title):
+    for key, value in chatsList.items():
+        if key.find(title) != -1:
+            return value
+    return None
 
 def main():
     try:
         tg = init()
-        initChats(tg)
-        #result = tg.get_me()
-        #result.wait()
-        #pprint(result.update)
-
+        chatsList = initChatsList(tg)
+        groupTitle = '𝗦𝗜𝗚𝗞𝗜𝗦𝗦💋'
+        print(getChatIDByTitle(chatsList, groupTitle))
     finally:
         uninit(tg)
 
