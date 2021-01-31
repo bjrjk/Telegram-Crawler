@@ -31,26 +31,29 @@ def uninit(tg):
 
 def initChats(tg):
     offset_chat_id = 0
-    chat_ids = []
+    chatsList = {}
     offset_order = 2 ** 63 - 1
     chats_received = True
 
     while chats_received:
         result = tg.get_chats(offset_order=offset_order, offset_chat_id=offset_chat_id)
         result.wait()
-
-        if result.update['chat_ids']:
-            pprint(result.update)
-            chat_ids += result.update['chat_ids']
-            chat_info = tg.get_chat(chat_ids[-1])
+        chatsDict = result.update['chat_ids']
+        if chatsDict:
+            for chatID in chatsDict:
+                chat_info = tg.get_chat(chatID)
+                chat_info.wait()
+                title = chat_info.update['title']
+                chatsList[title] = chatID
+            chat_info = tg.get_chat(chatsDict[-1])
             chat_info.wait()
             pprint(chat_info.update)
             offset_chat_id = chat_info.update['id']
             offset_order = chat_info.update['positions'][0]['order']
-        else:  # no more chats to load
+        else:
             chats_received = False
 
-    print('Chats: ', chat_ids)
+    print('Chats-Map: ', chatsList)
 
 def main():
     try:
